@@ -35,7 +35,7 @@ async function run() {
 
          app.get('/toys',async(req,res) =>{
 
-            const curser =toyCollection.find();
+            const curser =toyCollection.find().limit(20);
             const result = await curser.toArray();
             res.send(result);
          })
@@ -59,7 +59,7 @@ run().catch(console.dir);
 
 
 app.get('/', (reg, res) => {
-    res.send("animal server server is running");
+    res.send("animal toy server is running");
 })
 
 
