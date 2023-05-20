@@ -46,11 +46,24 @@ async function run() {
            const result = await toyCollection.insertOne(newToys);
            res.send(result);
         })
+
         app.get('/toys/:id', async (req,res) =>{
           const id = req.params.id;
           const query = {_id: new ObjectId(id)}
           const result = await toyCollection.findOne(query)
           res.send(result)
+        })
+
+        app.get('/mytoys',async(req,res) =>{
+          
+          const query = {};
+
+           if(req.query?.email){
+             query = {email : req.query.email};
+           }
+
+           const  result = await toyCollection.find(query).toArray();
+           res.send(result);
         })
     
     await client.db("admin").command({ ping: 1 });
