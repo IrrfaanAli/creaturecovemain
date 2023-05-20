@@ -55,11 +55,11 @@ async function run() {
         })
 
         app.get('/mytoys',async(req,res) =>{
-          
-          const query = {};
 
-           if(req.query?.email){
-             query = {email : req.query.email};
+           let query = {};
+
+           if(req.query?.sellerEmail){
+             query = {sellerEmail : req.query.sellerEmail};
            }
 
            const  result = await toyCollection.find(query).toArray();
