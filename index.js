@@ -71,8 +71,6 @@ async function run() {
             sort = {price : - 1};
             console.log(req.query.sort)
           }
-         
-
           const  result = (await toyCollection.find(query).sort(sort).toArray());
           res.send(result);
        })
@@ -95,7 +93,7 @@ async function run() {
           let toy = {
 
             $set :{
-              price : updatedToy.newPrice,
+              price : parseInt(updatedToy.newPrice),
               availableQuantity : updatedToy.newAvailableQuantity,
               description : updatedToy.newDescription
             }
