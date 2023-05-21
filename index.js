@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 
-const uri = "mongodb://irfan:K8Z71t12iFNYtgDP@ac-o9yzcgk-shard-00-00.ymwhs5q.mongodb.net:27017,ac-o9yzcgk-shard-00-01.ymwhs5q.mongodb.net:27017,ac-o9yzcgk-shard-00-02.ymwhs5q.mongodb.net:27017/?ssl=true&replicaSet=atlas-xges0x-shard-0&authSource=admin&retryWrites=true&w=majority";
+const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ac-o9yzcgk-shard-00-00.ymwhs5q.mongodb.net:27017,ac-o9yzcgk-shard-00-01.ymwhs5q.mongodb.net:27017,ac-o9yzcgk-shard-00-02.ymwhs5q.mongodb.net:27017/?ssl=true&replicaSet=atlas-xges0x-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
 
 const client = new MongoClient(uri, {
@@ -56,15 +56,27 @@ async function run() {
 
         app.get('/mytoys',async(req,res) =>{
 
-           let query = {};
+          let query = {};
+          let sort = {};
 
-           if(req.query?.sellerEmail){
-             query = {sellerEmail : req.query.sellerEmail};
-           }
+          if(req.query?.sellerEmail){
+            query = {sellerEmail : req.query.sellerEmail};
+            
+          }
+          if(parseInt(req.query?.sort) === 1){
+            sort = {price : 1};
+            console.log(req.query.sort)
+          }
+          if(parseInt(req.query?.sort) === -1){
+            sort = {price : - 1};
+            console.log(req.query.sort)
+          }
+         
 
-           const  result = await toyCollection.find(query).toArray();
-           res.send(result);
-        })
+          const  result = (await toyCollection.find(query).sort(sort).toArray());
+          res.send(result);
+       })
+
 
         app.delete('/toys/:id', async (req,res) =>{
           const id = req.params.id;
